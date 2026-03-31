@@ -281,7 +281,7 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
                     size="icon"
                     className="text-destructive hover:text-destructive shrink-0"
                     onClick={() => removeUnionGroup(index)}
-                    disabled={form.unionGroups.length <= 1}
+                    disabled={false}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
