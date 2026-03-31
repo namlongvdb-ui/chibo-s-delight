@@ -191,9 +191,7 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
           <div style={{ width: '60px', borderBottom: '2px solid #000', margin: '6px auto' }}></div>
         </div>
         <div style={{ textAlign: 'center', width: '45%' }}>
-          <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
-          <p style={{ fontSize: '12px', fontWeight: 'bold' }}>Độc lập - Tự do - Hạnh phúc</p>
-          <div style={{ width: '120px', borderBottom: '2px solid #000', margin: '6px auto' }}></div>
+          <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', textDecoration: 'underline' }}>ĐẢNG CỘNG SẢN VIỆT NAM</p>
         </div>
       </div>
       <div style={{ textAlign: 'center', marginBottom: '16px' }}>
