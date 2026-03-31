@@ -152,8 +152,7 @@ export function exportStaffListExcel() {
 
   const fmt = (n: number) => Math.round(n);
 
-  // Group by department
-  const fmt = (n: number) => Math.round(n);
+
 
   const rows: (string | number)[][] = [
     [settings.orgName + ' - ' + settings.orgSubName],
