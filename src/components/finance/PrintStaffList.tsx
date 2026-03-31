@@ -119,8 +119,8 @@ export function PrintStaffList() {
                   );
                 })}
                 <tr>
-                  <td colSpan={8} style={{ ...rightCell, fontWeight: 'bold', fontStyle: 'italic', fontSize: '10px' }}>
-                    Cộng {dept}: {members.length} đoàn viên
+                   <td colSpan={8} style={{ ...rightCell, fontWeight: 'bold', fontStyle: 'italic', fontSize: '10px' }}>
+                     Cộng {dept}: {members.length} đảng viên
                   </td>
                   <td style={{ ...rightCell, fontWeight: 'bold' }}>
                     {fmt(Math.round(members.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}
