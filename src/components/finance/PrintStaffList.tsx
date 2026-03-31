@@ -196,7 +196,7 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
       </div>
       <div style={{ textAlign: 'center', marginBottom: '16px' }}>
         <p style={{ fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase' }}>
-          DANH SÁCH THU ĐOÀN PHÍ CÔNG ĐOÀN
+          DANH SÁCH THU ĐẢNG PHÍ CHI BỘ
         </p>
         <p style={{ fontSize: '12px', fontWeight: 'bold', marginTop: '4px' }}>
           Tháng {String(month).padStart(2, '0')} năm {year}
