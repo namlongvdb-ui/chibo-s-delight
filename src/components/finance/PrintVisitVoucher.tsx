@@ -24,7 +24,7 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
   const selectedGroup = settings.unionGroups.find(g => g.name === data.unionGroupName);
   const groupLeaderName = selectedGroup?.leaderName || settings.unionGroups[0]?.leaderName || '';
 
-  // 2. Kiểm tra tổ đảng có thuộc địa bàn nào không
+  // 2. Kiểm tra chi bộ cơ sở có thuộc địa bàn nào không
   const currentGroupName = data.unionGroupName || "";
   const matchedArea = (settings.areaRepresentatives || []).find(area => 
     area.areaName && currentGroupName.includes(area.areaName)
@@ -90,9 +90,9 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
           <p style={{ fontWeight: 'bold', margin: 0 }}>{leftSignatureName}</p>
         </div>
 
-        {/* Bên phải: Tổ đảng */}
+        {/* Bên phải: Chi bộ cơ sở */}
         <div style={{ width: '50%' }}>
-          <p style={{ fontWeight: 'bold', margin: '0 0 4px' }}>TM. Tổ đảng</p>
+          <p style={{ fontWeight: 'bold', margin: '0 0 4px' }}>TM. Chi bộ cơ sở</p>
           <p style={{ fontWeight: 'bold', margin: '0 0 2px' }}>Tổ trưởng</p>
           <p style={{ fontSize: '11px', fontStyle: 'italic', margin: '0 0 2px', color: '#666' }}>(Ký, họ tên)</p>
           <div style={{ height: '70px' }}></div>

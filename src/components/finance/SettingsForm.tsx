@@ -251,20 +251,20 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
           {/* Dynamic Union Groups */}
           <div className="border-t border-border pt-4">
             <div className="flex items-center justify-between mb-3">
-              <Label className="text-sm font-semibold text-foreground">Danh sách Tổ Đảng</Label>
+              <Label className="text-sm font-semibold text-foreground">Danh sách Chi bộ cơ sở</Label>
               <Button type="button" variant="outline" size="sm" onClick={addUnionGroup}>
-                <Plus className="h-4 w-4 mr-1" /> Thêm tổ đảng
+                <Plus className="h-4 w-4 mr-1" /> Thêm chi bộ cơ sở
               </Button>
             </div>
             <div className="space-y-3">
               {form.unionGroups.map((group, index) => (
                 <div key={index} className="flex gap-2 items-end bg-muted/30 rounded-md p-3 border border-border">
                   <div className="flex-1">
-                    <Label className="text-muted-foreground text-xs">Tên tổ đảng</Label>
+                    <Label className="text-muted-foreground text-xs">Tên chi bộ cơ sở</Label>
                     <Input
                       value={group.name}
                       onChange={e => updateUnionGroup(index, 'name', e.target.value)}
-                      placeholder="VD: Tổ Đảng BP Kế toán – Hành chính"
+                      placeholder="VD: Chi bộ cơ sở PGD Cao Bằng"
                     />
                   </div>
                   <div className="flex-1">
@@ -293,7 +293,7 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
           {/* Area Representatives */}
           <div className="border-t border-border pt-4">
             <div className="flex items-center justify-between mb-3">
-              <Label className="text-sm font-semibold text-foreground">Phụ trách chi bộ địa bàn</Label>
+              <Label className="text-sm font-semibold text-foreground">Chi bộ cơ sở</Label>
               <Button type="button" variant="outline" size="sm" onClick={() => setForm(prev => ({
                 ...prev,
                 areaRepresentatives: [...(prev.areaRepresentatives || []), { areaName: '', officerName: '' }],
