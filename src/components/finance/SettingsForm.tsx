@@ -260,11 +260,11 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
               {form.unionGroups.map((group, index) => (
                 <div key={index} className="flex gap-2 items-end bg-muted/30 rounded-md p-3 border border-border">
                   <div className="flex-1">
-                    <Label className="text-muted-foreground text-xs">Tên tổ công đoàn</Label>
+                    <Label className="text-muted-foreground text-xs">Tên tổ đảng</Label>
                     <Input
                       value={group.name}
                       onChange={e => updateUnionGroup(index, 'name', e.target.value)}
-                      placeholder="VD: Tổ CĐ BP Kế toán – Hành chính"
+                      placeholder="VD: Tổ Đảng BP Kế toán – Hành chính"
                     />
                   </div>
                   <div className="flex-1">
