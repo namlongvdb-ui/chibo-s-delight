@@ -24,32 +24,20 @@ function getPositionRank(position: string): number {
 
 function fmt(n: number) { return n.toLocaleString('vi-VN'); }
 
-function groupAndSort(list: StaffMember[]) {
-  const map: Record<string, StaffMember[]> = {};
-  for (const s of list) {
-    const dept = s.department || 'Chưa phân tổ';
-    if (!map[dept]) map[dept] = [];
-    map[dept].push(s);
-  }
-  for (const dept of Object.keys(map)) {
-    map[dept].sort((a, b) => getPositionRank(a.position) - getPositionRank(b.position));
-  }
-  return map;
-}
-
 export function PrintStaffList() {
   const orgSettings = getOrgSettings();
   const settings = getStaffSettings();
   const list = getStaffList();
-  const grouped = useMemo(() => groupAndSort(list), [list]);
-  const deptNames = Object.keys(grouped).sort();
+  const sorted = useMemo(() => 
+    [...list].sort((a, b) => getPositionRank(a.position) - getPositionRank(b.position)), 
+    [list]
+  );
 
   const totalFee = list.reduce((sum, s) => {
     const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
     return sum + calculateUnionFee(lbh, settings.baseSalary);
   }, 0);
 
-  let stt = 0;
   const cellStyle: React.CSSProperties = { border: '1px solid #000', padding: '3px 5px' };
   const rightCell: React.CSSProperties = { ...cellStyle, textAlign: 'right' };
   const centerCell: React.CSSProperties = { ...cellStyle, textAlign: 'center' };
@@ -70,7 +58,6 @@ export function PrintStaffList() {
         <p style={{ fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase' }}>
           DANH SÁCH ĐẢNG VIÊN CHI BỘ
         </p>
-        <p style={{ fontSize: '11px', fontStyle: 'italic', marginTop: '2px' }}>(Sắp xếp theo Tổ Đảng)</p>
       </div>
 
       <div style={{ marginBottom: '8px', fontSize: '11px' }}>
@@ -80,59 +67,34 @@ export function PrintStaffList() {
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
         <thead>
           <tr>
-            {['STT', 'Họ và tên', 'Chức vụ', 'Ngày sinh', 'GT', 'HS lương', 'HS CV', 'Lương vùng', 'Lương BH', 'Đảng phí'].map((h, i) => (
+            {['STT', 'Họ và tên', 'Chức vụ', 'Đơn vị', 'Ngày sinh', 'GT', 'HS lương', 'HS CV', 'Lương KV', 'Lương tính ĐP', 'Đảng phí'].map((h, i) => (
               <th key={i} style={{ ...centerCell, fontWeight: 'bold', backgroundColor: '#f0f0f0', fontSize: '11px' }}>{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {deptNames.map(dept => {
-            const members = grouped[dept];
-            const deptFee = members.reduce((sum, s) => {
-              const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
-              return sum + calculateUnionFee(lbh, settings.baseSalary);
-            }, 0);
+          {sorted.map((s, i) => {
+            const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
+            const fee = calculateUnionFee(lbh, settings.baseSalary);
             return (
-              <tbody key={dept}>
-                <tr>
-                  <td colSpan={10} style={{ ...cellStyle, fontWeight: 'bold', backgroundColor: '#e8e8e8', fontSize: '11px' }}>
-                    {dept}
-                  </td>
-                </tr>
-                {members.map(s => {
-                  stt++;
-                  const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
-                  const fee = calculateUnionFee(lbh, settings.baseSalary);
-                  return (
-                    <tr key={s.id}>
-                      <td style={centerCell}>{stt}</td>
-                      <td style={cellStyle}>{s.fullName}</td>
-                      <td style={cellStyle}>{s.position}</td>
-                      <td style={centerCell}>{s.birthDate ? new Date(s.birthDate).toLocaleDateString('vi-VN') : ''}</td>
-                      <td style={centerCell}>{s.gender === 'nam' ? 'Nam' : 'Nữ'}</td>
-                      <td style={rightCell}>{s.salaryCoefficient.toFixed(2)}</td>
-                      <td style={rightCell}>{s.positionCoefficient.toFixed(2)}</td>
-                      <td style={rightCell}>{fmt(s.regionalSalary)}</td>
-                      <td style={rightCell}>{fmt(Math.round(lbh))}</td>
-                      <td style={rightCell}>{fmt(Math.round(fee))}</td>
-                    </tr>
-                  );
-                })}
-                <tr>
-                   <td colSpan={8} style={{ ...rightCell, fontWeight: 'bold', fontStyle: 'italic', fontSize: '10px' }}>
-                     Cộng {dept}: {members.length} đảng viên
-                  </td>
-                  <td style={{ ...rightCell, fontWeight: 'bold' }}>
-                    {fmt(Math.round(members.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}
-                  </td>
-                  <td style={{ ...rightCell, fontWeight: 'bold' }}>{fmt(Math.round(deptFee))}</td>
-                </tr>
-              </tbody>
+              <tr key={s.id}>
+                <td style={centerCell}>{i + 1}</td>
+                <td style={cellStyle}>{s.fullName}</td>
+                <td style={cellStyle}>{s.position}</td>
+                <td style={cellStyle}>{s.department}</td>
+                <td style={centerCell}>{s.birthDate ? new Date(s.birthDate).toLocaleDateString('vi-VN') : ''}</td>
+                <td style={centerCell}>{s.gender === 'nam' ? 'Nam' : 'Nữ'}</td>
+                <td style={rightCell}>{s.salaryCoefficient.toFixed(2)}</td>
+                <td style={rightCell}>{s.positionCoefficient.toFixed(2)}</td>
+                <td style={rightCell}>{fmt(s.regionalSalary)}</td>
+                <td style={rightCell}>{fmt(Math.round(lbh))}</td>
+                <td style={rightCell}>{fmt(Math.round(fee))}</td>
+              </tr>
             );
           })}
           <tr>
-             <td colSpan={8} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
-               TỔNG CỘNG: {list.length} đảng viên
+            <td colSpan={9} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
+              TỔNG CỘNG: {list.length} đảng viên
             </td>
             <td style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
               {fmt(Math.round(list.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}
@@ -150,7 +112,7 @@ export function PrintStaffList() {
           <p style={{ fontWeight: 'bold' }}>{orgSettings.accountantName}</p>
         </div>
         <div style={{ textAlign: 'center', width: '45%' }}>
-          <p style={{ fontWeight: 'bold' }}>LÃNH ĐẠO ĐƠN VỊ</p>
+          <p style={{ fontWeight: 'bold' }}>BÍ THƯ CHI BỘ</p>
           <p style={{ fontStyle: 'italic', fontSize: '10px' }}>(Ký, họ tên)</p>
           <div style={{ height: '50px' }}></div>
           <p style={{ fontWeight: 'bold' }}>{orgSettings.leaderName}</p>
@@ -169,15 +131,16 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
   const orgSettings = getOrgSettings();
   const settings = getStaffSettings();
   const list = getStaffList();
-  const grouped = useMemo(() => groupAndSort(list), [list]);
-  const deptNames = Object.keys(grouped).sort();
+  const sorted = useMemo(() => 
+    [...list].sort((a, b) => getPositionRank(a.position) - getPositionRank(b.position)), 
+    [list]
+  );
 
   const totalFee = list.reduce((sum, s) => {
     const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
     return sum + calculateUnionFee(lbh, settings.baseSalary);
   }, 0);
 
-  let stt = 0;
   const cellStyle: React.CSSProperties = { border: '1px solid #000', padding: '3px 5px' };
   const rightCell: React.CSSProperties = { ...cellStyle, textAlign: 'right' };
   const centerCell: React.CSSProperties = { ...cellStyle, textAlign: 'center' };
@@ -205,66 +168,37 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
 
       <div style={{ marginBottom: '8px', fontSize: '11px' }}>
         <span>Lương cơ sở: <strong>{fmt(settings.baseSalary)} đ</strong></span>
-        <span style={{ margin: '0 10px' }}>|</span>
-        <span>Trần đảng phí: <strong>{fmt(Math.round(settings.baseSalary * 0.1))} đ</strong></span>
       </div>
 
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
         <thead>
           <tr>
-            {['STT', 'Họ và tên', 'Chức vụ', 'HS lương', 'HS CV', 'Lương vùng', 'Lương BH', 'Đảng phí (0,5%)', 'Ký nhận'].map((h, i) => (
+            {['STT', 'Họ và tên', 'Chức vụ', 'HS lương', 'HS CV', 'Lương KV', 'Lương tính ĐP', 'Đảng phí (1%)', 'Ký nhận'].map((h, i) => (
               <th key={i} style={{ ...centerCell, fontWeight: 'bold', backgroundColor: '#f0f0f0', fontSize: '11px' }}>{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {deptNames.map(dept => {
-            const members = grouped[dept];
-            const deptFee = members.reduce((sum, s) => {
-              const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
-              return sum + calculateUnionFee(lbh, settings.baseSalary);
-            }, 0);
+          {sorted.map((s, i) => {
+            const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
+            const fee = calculateUnionFee(lbh, settings.baseSalary);
             return (
-              <tbody key={dept}>
-                <tr>
-                  <td colSpan={9} style={{ ...cellStyle, fontWeight: 'bold', backgroundColor: '#e8e8e8', fontSize: '11px' }}>
-                    {dept}
-                  </td>
-                </tr>
-                {members.map(s => {
-                  stt++;
-                  const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
-                  const fee = calculateUnionFee(lbh, settings.baseSalary);
-                  return (
-                    <tr key={s.id}>
-                      <td style={centerCell}>{stt}</td>
-                      <td style={cellStyle}>{s.fullName}</td>
-                      <td style={cellStyle}>{s.position}</td>
-                      <td style={rightCell}>{s.salaryCoefficient.toFixed(2)}</td>
-                      <td style={rightCell}>{s.positionCoefficient.toFixed(2)}</td>
-                      <td style={rightCell}>{fmt(s.regionalSalary)}</td>
-                      <td style={rightCell}>{fmt(Math.round(lbh))}</td>
-                      <td style={rightCell}>{fmt(Math.round(fee))}</td>
-                      <td style={{ ...cellStyle, width: '80px' }}></td>
-                    </tr>
-                  );
-                })}
-                <tr>
-                   <td colSpan={6} style={{ ...rightCell, fontWeight: 'bold', fontStyle: 'italic', fontSize: '10px' }}>
-                     Cộng {dept}: {members.length} đảng viên
-                  </td>
-                  <td style={{ ...rightCell, fontWeight: 'bold' }}>
-                    {fmt(Math.round(members.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}
-                  </td>
-                  <td style={{ ...rightCell, fontWeight: 'bold' }}>{fmt(Math.round(deptFee))}</td>
-                  <td style={cellStyle}></td>
-                </tr>
-              </tbody>
+              <tr key={s.id}>
+                <td style={centerCell}>{i + 1}</td>
+                <td style={cellStyle}>{s.fullName}</td>
+                <td style={cellStyle}>{s.position}</td>
+                <td style={rightCell}>{s.salaryCoefficient.toFixed(2)}</td>
+                <td style={rightCell}>{s.positionCoefficient.toFixed(2)}</td>
+                <td style={rightCell}>{fmt(s.regionalSalary)}</td>
+                <td style={rightCell}>{fmt(Math.round(lbh))}</td>
+                <td style={rightCell}>{fmt(Math.round(fee))}</td>
+                <td style={{ ...cellStyle, width: '80px' }}></td>
+              </tr>
             );
           })}
           <tr>
-             <td colSpan={6} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
-               TỔNG CỘNG: {list.length} đảng viên
+            <td colSpan={6} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
+              TỔNG CỘNG: {list.length} đảng viên
             </td>
             <td style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
               {fmt(Math.round(list.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}
@@ -289,7 +223,7 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
           <p style={{ fontWeight: 'bold' }}>{orgSettings.accountantName}</p>
         </div>
         <div style={{ textAlign: 'center', width: '30%' }}>
-          <p style={{ fontWeight: 'bold' }}>LÃNH ĐẠO ĐƠN VỊ</p>
+          <p style={{ fontWeight: 'bold' }}>BÍ THƯ CHI BỘ</p>
           <p style={{ fontStyle: 'italic', fontSize: '10px' }}>(Ký, họ tên)</p>
           <div style={{ height: '50px' }}></div>
           <p style={{ fontWeight: 'bold' }}>{orgSettings.leaderName}</p>
