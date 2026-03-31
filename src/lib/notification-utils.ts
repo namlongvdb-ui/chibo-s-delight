@@ -38,7 +38,7 @@ export async function getSignerUserIds(): Promise<string[]> {
     .select('user_id')
     .eq('is_active', true);
   
-  return data ? [...new Set(data.map(d => d.user_id))] : [];
+  return data ? [...new Set(data.map(d => d.user_id))] as string[] : [];
 }
 
 /**
