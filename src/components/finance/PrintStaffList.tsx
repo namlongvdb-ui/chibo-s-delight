@@ -131,8 +131,8 @@ export function PrintStaffList() {
             );
           })}
           <tr>
-            <td colSpan={8} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
-              TỔNG CỘNG: {list.length} đoàn viên
+             <td colSpan={8} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
+               TỔNG CỘNG: {list.length} đảng viên
             </td>
             <td style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
               {fmt(Math.round(list.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}
