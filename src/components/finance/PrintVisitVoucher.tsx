@@ -20,7 +20,7 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
   const d = new Date(data.date);
   const amountWords = data.amount > 0 ? numberToVietnameseWords(data.amount) : 'Không đồng';
 
-  // 1. Tìm tên Tổ trưởng của tổ được chọn
+  // 1. Tìm tên Bí thư chi bộ cơ sở của chi bộ được chọn
   const selectedGroup = settings.unionGroups.find(g => g.name === data.unionGroupName);
   const groupLeaderName = selectedGroup?.leaderName || settings.unionGroups[0]?.leaderName || '';
 
@@ -93,7 +93,7 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
         {/* Bên phải: Chi bộ cơ sở */}
         <div style={{ width: '50%' }}>
           <p style={{ fontWeight: 'bold', margin: '0 0 4px' }}>TM. Chi bộ cơ sở</p>
-          <p style={{ fontWeight: 'bold', margin: '0 0 2px' }}>Tổ trưởng</p>
+          <p style={{ fontWeight: 'bold', margin: '0 0 2px' }}>Bí thư chi bộ cơ sở</p>
           <p style={{ fontSize: '11px', fontStyle: 'italic', margin: '0 0 2px', color: '#666' }}>(Ký, họ tên)</p>
           <div style={{ height: '70px' }}></div>
           <p style={{ fontWeight: 'bold', margin: 0 }}>{groupLeaderName}</p>
