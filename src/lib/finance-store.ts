@@ -13,12 +13,7 @@ const defaultSettings: OrgSettings = {
   accountantName: 'Lê Thị Thu Hương',
   creatorName: 'Lê Thị Thu Hương',
   treasurerName: 'Nguyễn Thị Yên',
-  unionGroups: [
-    { 
-      name: 'Tổ Đảng BP Kế toán – Hành chính, PGD Cao Bằng', 
-      leaderName: 'Trần Nam Long'
-    },
-  ],
+  unionGroups: [],
   areaRepresentatives: [],
   defaultAccountCode: '',
   openingBalance: 0,
