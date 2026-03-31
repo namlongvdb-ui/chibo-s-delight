@@ -83,7 +83,7 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '14px', textAlign: 'center', fontSize: '13px' }}>
         {/* Bên trái: Thay đổi linh hoạt theo tổ */}
         <div style={{ width: '50%' }}>
-          <p style={{ fontWeight: 'bold', margin: '0 0 4px' }}>TM.BCH CĐ NHPT Chi nhánh</p>
+          <p style={{ fontWeight: 'bold', margin: '0 0 4px' }}>TM.BCH Chi bộ</p>
           <p style={{ fontWeight: 'bold', margin: '0 0 2px' }}>{leftSignatureTitle}</p>
           <p style={{ fontSize: '11px', fontStyle: 'italic', margin: '0 0 2px', color: '#666' }}>(Ký, họ tên)</p>
           <div style={{ height: '70px' }}></div>
