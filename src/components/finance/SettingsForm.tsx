@@ -293,7 +293,7 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
           {/* Area Representatives */}
           <div className="border-t border-border pt-4">
             <div className="flex items-center justify-between mb-3">
-              <Label className="text-sm font-semibold text-foreground">Phụ trách chi bộ địa bàn</Label>
+              <Label className="text-sm font-semibold text-foreground">Chi bộ cơ sở</Label>
               <Button type="button" variant="outline" size="sm" onClick={() => setForm(prev => ({
                 ...prev,
                 areaRepresentatives: [...(prev.areaRepresentatives || []), { areaName: '', officerName: '' }],
