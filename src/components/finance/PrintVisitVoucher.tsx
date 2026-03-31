@@ -90,9 +90,9 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
           <p style={{ fontWeight: 'bold', margin: 0 }}>{leftSignatureName}</p>
         </div>
 
-        {/* Bên phải: Tổ công đoàn */}
+        {/* Bên phải: Tổ đảng */}
         <div style={{ width: '50%' }}>
-          <p style={{ fontWeight: 'bold', margin: '0 0 4px' }}>TM. Tổ công đoàn</p>
+          <p style={{ fontWeight: 'bold', margin: '0 0 4px' }}>TM. Tổ đảng</p>
           <p style={{ fontWeight: 'bold', margin: '0 0 2px' }}>Tổ trưởng</p>
           <p style={{ fontSize: '11px', fontStyle: 'italic', margin: '0 0 2px', color: '#666' }}>(Ký, họ tên)</p>
           <div style={{ height: '70px' }}></div>

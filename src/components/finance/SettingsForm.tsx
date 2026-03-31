@@ -301,7 +301,7 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
                 <Plus className="h-4 w-4 mr-1" /> Thêm địa bàn
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground mb-3">Khi đơn vị thuộc địa bàn, phiếu thăm hỏi sẽ hiển thị "UV BCH Công đoàn" thay vì "Chủ tịch"</p>
+            <p className="text-xs text-muted-foreground mb-3">Khi đơn vị thuộc địa bàn, phiếu thăm hỏi sẽ hiển thị "UV BCH Chi bộ" thay vì "Bí thư"</p>
             <div className="space-y-3">
               {(form.areaRepresentatives || []).map((rep, index) => (
                 <div key={index} className="flex gap-2 items-end bg-muted/30 rounded-md p-3 border border-border">
