@@ -20,7 +20,7 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
   const d = new Date(data.date);
   const amountWords = data.amount > 0 ? numberToVietnameseWords(data.amount) : 'Không đồng';
 
-  // 1. Tìm tên Bí thư chi bộ cơ sở của chi bộ được chọn
+  // 1. Tìm tên Bí thư chi bộ của chi bộ được chọn
   const selectedGroup = settings.unionGroups.find(g => g.name === data.unionGroupName);
   const groupLeaderName = selectedGroup?.leaderName || settings.unionGroups[0]?.leaderName || '';
 
