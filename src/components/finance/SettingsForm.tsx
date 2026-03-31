@@ -251,9 +251,9 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
           {/* Dynamic Union Groups */}
           <div className="border-t border-border pt-4">
             <div className="flex items-center justify-between mb-3">
-              <Label className="text-sm font-semibold text-foreground">Danh sách Tổ Công đoàn</Label>
+              <Label className="text-sm font-semibold text-foreground">Danh sách Tổ Đảng</Label>
               <Button type="button" variant="outline" size="sm" onClick={addUnionGroup}>
-                <Plus className="h-4 w-4 mr-1" /> Thêm tổ CĐ
+                <Plus className="h-4 w-4 mr-1" /> Thêm tổ đảng
               </Button>
             </div>
             <div className="space-y-3">
