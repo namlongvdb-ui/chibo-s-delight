@@ -65,8 +65,6 @@ export function calculateInsuranceSalary(
   return (salaryCoefficient * regionalSalary) + (positionCoefficient * baseSalary);
 }
 
-export function calculateUnionFee(insuranceSalary: number, baseSalary: number): number {
-  const fee = insuranceSalary * 0.005;
-  const cap = baseSalary * 0.10;
-  return Math.min(fee, cap);
+export function calculateUnionFee(insuranceSalary: number, _baseSalary: number): number {
+  return insuranceSalary * 0.01;
 }

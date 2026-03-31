@@ -16,8 +16,8 @@ interface SettingsFormProps {
 }
 
 const fields: { key: keyof OrgSettings; label: string; placeholder: string; type?: string }[] = [
-  { key: 'orgName', label: 'Tên tổ chức (dòng 1)', placeholder: 'Công đoàn NHPT Việt Nam' },
-  { key: 'orgSubName', label: 'Tên đơn vị (dòng 2)', placeholder: 'Công đoàn NHPT Chi nhánh KV Bắc Đông Bắc' },
+  { key: 'orgName', label: 'Tên tổ chức (dòng 1)', placeholder: 'Đảng bộ UBND Phường Thực Phán' },
+  { key: 'orgSubName', label: 'Tên đơn vị (dòng 2)', placeholder: 'Chi bộ Phòng Giao Dịch Cao Bằng - NHPT' },
   { key: 'leaderName', label: 'Lãnh đạo đơn vị', placeholder: 'Họ tên lãnh đạo' },
   { key: 'accountantName', label: 'Kế toán', placeholder: 'Họ tên kế toán' },
   { key: 'treasurerName', label: 'Thủ quỹ', placeholder: 'Họ tên thủ quỹ' },
@@ -251,20 +251,20 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
           {/* Dynamic Union Groups */}
           <div className="border-t border-border pt-4">
             <div className="flex items-center justify-between mb-3">
-              <Label className="text-sm font-semibold text-foreground">Danh sách Tổ Công đoàn</Label>
+              <Label className="text-sm font-semibold text-foreground">Danh sách Tổ Đảng</Label>
               <Button type="button" variant="outline" size="sm" onClick={addUnionGroup}>
-                <Plus className="h-4 w-4 mr-1" /> Thêm tổ CĐ
+                <Plus className="h-4 w-4 mr-1" /> Thêm tổ đảng
               </Button>
             </div>
             <div className="space-y-3">
               {form.unionGroups.map((group, index) => (
                 <div key={index} className="flex gap-2 items-end bg-muted/30 rounded-md p-3 border border-border">
                   <div className="flex-1">
-                    <Label className="text-muted-foreground text-xs">Tên tổ công đoàn</Label>
+                    <Label className="text-muted-foreground text-xs">Tên tổ đảng</Label>
                     <Input
                       value={group.name}
                       onChange={e => updateUnionGroup(index, 'name', e.target.value)}
-                      placeholder="VD: Tổ CĐ BP Kế toán – Hành chính"
+                      placeholder="VD: Tổ Đảng BP Kế toán – Hành chính"
                     />
                   </div>
                   <div className="flex-1">
@@ -293,7 +293,7 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
           {/* Area Representatives */}
           <div className="border-t border-border pt-4">
             <div className="flex items-center justify-between mb-3">
-              <Label className="text-sm font-semibold text-foreground">Phụ trách công đoàn địa bàn</Label>
+              <Label className="text-sm font-semibold text-foreground">Phụ trách chi bộ địa bàn</Label>
               <Button type="button" variant="outline" size="sm" onClick={() => setForm(prev => ({
                 ...prev,
                 areaRepresentatives: [...(prev.areaRepresentatives || []), { areaName: '', officerName: '' }],
@@ -301,7 +301,7 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
                 <Plus className="h-4 w-4 mr-1" /> Thêm địa bàn
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground mb-3">Khi đơn vị thuộc địa bàn, phiếu thăm hỏi sẽ hiển thị "UV BCH Công đoàn" thay vì "Chủ tịch"</p>
+            <p className="text-xs text-muted-foreground mb-3">Khi đơn vị thuộc địa bàn, phiếu thăm hỏi sẽ hiển thị "UV BCH Chi bộ" thay vì "Bí thư"</p>
             <div className="space-y-3">
               {(form.areaRepresentatives || []).map((rep, index) => (
                 <div key={index} className="flex gap-2 items-end bg-muted/30 rounded-md p-3 border border-border">

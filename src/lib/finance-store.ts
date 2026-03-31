@@ -15,7 +15,7 @@ const defaultSettings: OrgSettings = {
   treasurerName: 'Nguyễn Thị Yên',
   unionGroups: [
     { 
-      name: 'Tổ CĐ BP Kế toán – Hành chính, PGD Cao Bằng', 
+      name: 'Tổ Đảng BP Kế toán – Hành chính, PGD Cao Bằng', 
       leaderName: 'Trần Nam Long'
     },
   ],
