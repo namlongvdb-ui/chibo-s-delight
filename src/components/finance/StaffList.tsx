@@ -9,7 +9,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { StaffMember, StaffSettings } from '@/types/finance';
@@ -17,12 +16,10 @@ import {
   getStaffList, addStaff, updateStaff, deleteStaff,
   getStaffSettings, saveStaffSettings,
   calculateInsuranceSalary, calculateUnionFee,
-  getTransferHistory, addTransferRecord,
 } from '@/lib/staff-store';
 import { getOrgSettings } from '@/lib/finance-store';
-import { TransferRecord } from '@/types/finance';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Users, Plus, Trash2, Pencil, Save, Settings2, Printer, Receipt, ChevronsUpDown, Check, ArrowRightLeft, LogOut, History, FileSpreadsheet, MoreHorizontal } from 'lucide-react';
+import { Users, Plus, Trash2, Pencil, Save, Settings2, Printer, Receipt, ChevronsUpDown, Check, FileSpreadsheet, MoreHorizontal } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintStaffList, PrintMonthlyFee } from './PrintStaffList';
 import { exportStaffListExcel } from '@/lib/export-utils';
@@ -88,21 +85,9 @@ export function StaffList() {
   const [feeMonth, setFeeMonth] = useState(new Date().getMonth() + 1);
   const [feeYear, setFeeYear] = useState(new Date().getFullYear());
   const [feeDialogOpen, setFeeDialogOpen] = useState(false);
-  const [transferDialogOpen, setTransferDialogOpen] = useState(false);
-  const [transferTarget, setTransferTarget] = useState<StaffMember | null>(null);
-  const [transferDept, setTransferDept] = useState('');
-  const [transferType, setTransferType] = useState<'move' | 'out'>('move');
-  const [activeTab, setActiveTab] = useState('all');
-  const [historyOpen, setHistoryOpen] = useState(false);
-  const [transferHistory, setTransferHistory] = useState<TransferRecord[]>([]);
-  const [bulkTransferOpen, setBulkTransferOpen] = useState(false);
-  const [bulkTransferStaff, setBulkTransferStaff] = useState<string>('');
-  const [bulkTransferDept, setBulkTransferDept] = useState('');
-  const [bulkTransferType, setBulkTransferType] = useState<'move' | 'out'>('move');
   const printRef = useRef<HTMLDivElement>(null);
 
   const orgSettings = getOrgSettings();
-  const unionGroupNames = orgSettings.unionGroups.map(g => g.name);
 
   useEffect(() => { setList(getStaffList()); }, []);
   const reload = () => setList(getStaffList());
@@ -115,13 +100,12 @@ export function StaffList() {
 
   const handleSubmit = () => {
     if (!form.fullName.trim()) { toast.error('Vui lòng nhập họ tên'); return; }
-    if (!form.department.trim()) { toast.error('Vui lòng chọn tổ công đoàn'); return; }
     if (editingId) {
       updateStaff(editingId, form);
-      toast.success('Đã cập nhật đoàn viên');
+      toast.success('Đã cập nhật đảng viên');
     } else {
       addStaff(form);
-      toast.success('Đã thêm đoàn viên');
+      toast.success('Đã thêm đảng viên');
     }
     setForm(emptyStaff);
     setEditingId(null);
@@ -137,92 +121,9 @@ export function StaffList() {
 
   const handleDelete = (id: string) => {
     deleteStaff(id);
-    toast.success('Đã xóa đoàn viên');
+    toast.success('Đã xóa đảng viên');
     reload();
   };
-
-  const handleOpenTransfer = (s: StaffMember, type: 'move' | 'out') => {
-    setTransferTarget(s);
-    setTransferType(type);
-    setTransferDept(type === 'out' ? 'Đã chuyển khỏi ngành' : '');
-    setTransferDialogOpen(true);
-  };
-
-  const handleTransfer = () => {
-    if (!transferTarget) return;
-    if (transferType === 'move' && !transferDept) {
-      toast.error('Vui lòng chọn tổ công đoàn đích');
-      return;
-    }
-    const record = {
-      staffId: transferTarget.id,
-      staffName: transferTarget.fullName,
-      fromDepartment: transferTarget.department,
-      toDepartment: transferType === 'out' ? 'Ra khỏi ngành' : transferDept,
-      type: transferType,
-      date: new Date().toISOString().split('T')[0],
-    };
-    addTransferRecord(record);
-
-    if (transferType === 'out') {
-      deleteStaff(transferTarget.id);
-      toast.success(`Đã chuyển ${transferTarget.fullName} ra khỏi ngành`);
-    } else {
-      updateStaff(transferTarget.id, { department: transferDept });
-      toast.success(`Đã chuyển ${transferTarget.fullName} sang ${transferDept}`);
-    }
-    setTransferDialogOpen(false);
-    setTransferTarget(null);
-    reload();
-  };
-
-  const openHistory = () => {
-    setTransferHistory(getTransferHistory());
-    setHistoryOpen(true);
-  };
-
-  const handleBulkTransfer = () => {
-    if (!bulkTransferStaff) { toast.error('Vui lòng chọn đoàn viên'); return; }
-    const staff = list.find(s => s.id === bulkTransferStaff);
-    if (!staff) return;
-    if (bulkTransferType === 'move' && !bulkTransferDept) { toast.error('Vui lòng chọn tổ đích'); return; }
-    const record = {
-      staffId: staff.id,
-      staffName: staff.fullName,
-      fromDepartment: staff.department,
-      toDepartment: bulkTransferType === 'out' ? 'Ra khỏi ngành' : bulkTransferDept,
-      type: bulkTransferType,
-      date: new Date().toISOString().split('T')[0],
-    };
-    addTransferRecord(record);
-    if (bulkTransferType === 'out') {
-      deleteStaff(staff.id);
-      toast.success(`Đã chuyển ${staff.fullName} ra khỏi ngành`);
-    } else {
-      updateStaff(staff.id, { department: bulkTransferDept });
-      toast.success(`Đã chuyển ${staff.fullName} sang ${bulkTransferDept}`);
-    }
-    setBulkTransferOpen(false);
-    setBulkTransferStaff('');
-    setBulkTransferDept('');
-    reload();
-  };
-
-  // Group by department
-  const groupedByDept = useMemo(() => {
-    const map: Record<string, StaffMember[]> = {};
-    for (const s of list) {
-      const dept = s.department || 'Chưa phân tổ';
-      if (!map[dept]) map[dept] = [];
-      map[dept].push(s);
-    }
-    return map;
-  }, [list]);
-
-  const filteredList = useMemo(() => {
-    if (activeTab === 'all') return list;
-    return list.filter(s => s.department === activeTab);
-  }, [list, activeTab]);
 
   const openLandscapePrintWindow = (mode: 'staff' | 'fee') => {
     const printMarkup = printRef.current?.innerHTML;
@@ -238,7 +139,7 @@ export function StaffList() {
       return;
     }
 
-    const title = mode === 'fee' ? 'Danh sách thu đoàn phí' : 'Danh sách đoàn viên';
+    const title = mode === 'fee' ? 'Danh sách thu đảng phí' : 'Danh sách đảng viên';
 
     printWindow.document.open();
     printWindow.document.write(`
@@ -304,7 +205,7 @@ export function StaffList() {
     });
   };
 
-  const totalUnionFee = useMemo(() => {
+  const totalPartyFee = useMemo(() => {
     return list.reduce((sum, s) => {
       const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
       return sum + calculateUnionFee(lbh, settings.baseSalary);
@@ -318,15 +219,9 @@ export function StaffList() {
       {/* Header */}
       <div className="flex items-center justify-between no-print">
         <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
-          <Users className="h-6 w-6" /> Danh sách đoàn viên
+          <Users className="h-6 w-6" /> Danh sách đảng viên
         </h2>
         <div className="flex gap-2 flex-wrap">
-          <Button variant="outline" size="sm" onClick={() => setBulkTransferOpen(true)}>
-            <ArrowRightLeft className="h-4 w-4 mr-1" /> Điều chuyển đoàn viên
-          </Button>
-          <Button variant="outline" size="sm" onClick={openHistory}>
-            <History className="h-4 w-4 mr-1" /> Lịch sử điều chuyển
-          </Button>
           <Button variant="outline" size="sm" onClick={() => { exportStaffListExcel(); toast.success('Đã xuất file Excel'); }}>
             <FileSpreadsheet className="h-4 w-4 mr-1" /> Xuất Excel
           </Button>
@@ -338,11 +233,11 @@ export function StaffList() {
           <Dialog open={feeDialogOpen} onOpenChange={setFeeDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm">
-                <Receipt className="h-4 w-4 mr-1" /> In thu đoàn phí
+                <Receipt className="h-4 w-4 mr-1" /> In thu đảng phí
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-xs">
-              <DialogHeader><DialogTitle>In danh sách thu đoàn phí</DialogTitle></DialogHeader>
+              <DialogHeader><DialogTitle>In danh sách thu đảng phí</DialogTitle></DialogHeader>
               <div className="space-y-3 py-2">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
@@ -377,7 +272,7 @@ export function StaffList() {
               <DialogHeader><DialogTitle>Thông số lương chung</DialogTitle></DialogHeader>
               <div className="space-y-3 py-2">
                 {([
-                  ['baseSalary', 'Lương cơ sở (VNĐ) - để tính trần đoàn phí'],
+                  ['baseSalary', 'Lương cơ sở (VNĐ)'],
                 ] as const).map(([key, label]) => (
                   <div key={key}>
                     <Label className="text-xs text-muted-foreground">{label}</Label>
@@ -392,25 +287,18 @@ export function StaffList() {
           {/* Add staff dialog */}
           <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) { setForm(emptyStaff); setEditingId(null); } }}>
             <DialogTrigger asChild>
-              <Button size="sm"><Plus className="h-4 w-4 mr-1" /> Thêm đoàn viên</Button>
+              <Button size="sm"><Plus className="h-4 w-4 mr-1" /> Thêm đảng viên</Button>
             </DialogTrigger>
             <DialogContent className="max-w-lg">
-              <DialogHeader><DialogTitle>{editingId ? 'Sửa thông tin đoàn viên' : 'Thêm đoàn viên mới'}</DialogTitle></DialogHeader>
+              <DialogHeader><DialogTitle>{editingId ? 'Sửa thông tin đảng viên' : 'Thêm đảng viên mới'}</DialogTitle></DialogHeader>
               <div className="grid grid-cols-2 gap-3 py-2">
                 <div className="col-span-2">
                   <Label className="text-xs text-muted-foreground">Họ và tên</Label>
                   <Input value={form.fullName} onChange={e => setForm(p => ({ ...p, fullName: e.target.value }))} placeholder="Nguyễn Văn A" />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Tổ công đoàn</Label>
-                  <Select value={form.department} onValueChange={v => setForm(p => ({ ...p, department: v }))}>
-                    <SelectTrigger><SelectValue placeholder="Chọn tổ công đoàn..." /></SelectTrigger>
-                    <SelectContent>
-                      {unionGroupNames.map(name => (
-                        <SelectItem key={name} value={name}>{name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label className="text-xs text-muted-foreground">Đơn vị</Label>
+                  <Input value={form.department} onChange={e => setForm(p => ({ ...p, department: e.target.value }))} placeholder="Nhập đơn vị..." />
                 </div>
                 <div>
                   <Label className="text-xs text-muted-foreground">Chức vụ</Label>
@@ -435,7 +323,7 @@ export function StaffList() {
                   <Input type="number" step="0.01" value={form.salaryCoefficient} onChange={e => setForm(p => ({ ...p, salaryCoefficient: Number(e.target.value) || 0 }))} />
                 </div>
                 <div>
-                  <Label className="text-xs text-muted-foreground">Lương vùng (VNĐ)</Label>
+                  <Label className="text-xs text-muted-foreground">Lương khu vực (VNĐ)</Label>
                   <Input type="number" value={form.regionalSalary} onChange={e => setForm(p => ({ ...p, regionalSalary: Number(e.target.value) || 0 }))} />
                 </div>
                 <div>
@@ -451,31 +339,9 @@ export function StaffList() {
 
       {/* Summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 no-print">
-        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Tổng đoàn viên</p><p className="text-2xl font-bold text-primary">{list.length}</p></CardContent></Card>
+        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Tổng đảng viên</p><p className="text-2xl font-bold text-primary">{list.length}</p></CardContent></Card>
         <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Lương cơ sở</p><p className="text-lg font-semibold text-foreground">{fmt(settings.baseSalary)} ₫</p></CardContent></Card>
-        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Tổng đoàn phí CĐ/tháng</p><p className="text-lg font-bold text-primary">{fmt(Math.round(totalUnionFee))} ₫</p></CardContent></Card>
-      </div>
-
-      {/* Filter tabs by union group */}
-      <div className="no-print">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="flex flex-wrap h-auto gap-1">
-            <TabsTrigger value="all" className="text-xs">
-              Tất cả <Badge variant="secondary" className="ml-1 text-[10px]">{list.length}</Badge>
-            </TabsTrigger>
-            {unionGroupNames.map(name => (
-              <TabsTrigger key={name} value={name} className="text-xs">
-                {name.length > 30 ? name.substring(0, 30) + '...' : name}
-                <Badge variant="secondary" className="ml-1 text-[10px]">{groupedByDept[name]?.length || 0}</Badge>
-              </TabsTrigger>
-            ))}
-            {Object.keys(groupedByDept).filter(d => !unionGroupNames.includes(d)).map(d => (
-              <TabsTrigger key={d} value={d} className="text-xs">
-                {d} <Badge variant="secondary" className="ml-1 text-[10px]">{groupedByDept[d]?.length || 0}</Badge>
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+        <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">Tổng đảng phí/tháng</p><p className="text-lg font-bold text-primary">{fmt(Math.round(totalPartyFee))} ₫</p></CardContent></Card>
       </div>
 
       {/* Table */}
@@ -487,23 +353,23 @@ export function StaffList() {
                 <TableRow className="bg-muted/50">
                   <TableHead className="w-10 text-center">STT</TableHead>
                   <TableHead>Họ và tên</TableHead>
-                  <TableHead>Tổ công đoàn</TableHead>
+                  <TableHead>Đơn vị</TableHead>
                   <TableHead>Chức vụ</TableHead>
                   <TableHead className="text-center">Ngày sinh</TableHead>
                   <TableHead className="text-center">GT</TableHead>
                   <TableHead className="text-right">HS lương</TableHead>
                   <TableHead className="text-right">HS CV</TableHead>
-                  <TableHead className="text-right">Lương vùng</TableHead>
-                  <TableHead className="text-right">Lương BH</TableHead>
-                  <TableHead className="text-right">Đoàn phí CĐ</TableHead>
+                  <TableHead className="text-right">Lương KV</TableHead>
+                  <TableHead className="text-right">Lương tính ĐP</TableHead>
+                  <TableHead className="text-right">Đảng phí</TableHead>
                   <TableHead className="w-16 text-center">Thao tác</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredList.length === 0 && (
-                  <TableRow><TableCell colSpan={12} className="text-center py-8 text-muted-foreground">Chưa có đoàn viên nào. Nhấn "Thêm đoàn viên" để bắt đầu.</TableCell></TableRow>
+                {list.length === 0 && (
+                  <TableRow><TableCell colSpan={12} className="text-center py-8 text-muted-foreground">Chưa có đảng viên nào. Nhấn "Thêm đảng viên" để bắt đầu.</TableCell></TableRow>
                 )}
-                {filteredList.map((s, i) => {
+                {list.map((s, i) => {
                   const lbh = calculateInsuranceSalary(s.salaryCoefficient, s.positionCoefficient, s.regionalSalary, settings.baseSalary);
                   const fee = calculateUnionFee(lbh, settings.baseSalary);
                   return (
@@ -530,11 +396,8 @@ export function StaffList() {
                             <DropdownMenuItem onClick={() => handleEdit(s)}>
                               <Pencil className="h-4 w-4 mr-2" /> Sửa thông tin
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleOpenTransfer(s, 'move')}>
-                              <ArrowRightLeft className="h-4 w-4 mr-2" /> Điều chuyển tổ
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleOpenTransfer(s, 'out')} className="text-destructive focus:text-destructive">
-                              <LogOut className="h-4 w-4 mr-2" /> Chuyển khỏi ngành
+                            <DropdownMenuItem onClick={() => handleDelete(s.id)} className="text-destructive focus:text-destructive">
+                              <Trash2 className="h-4 w-4 mr-2" /> Xóa đảng viên
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -548,154 +411,11 @@ export function StaffList() {
         </CardContent>
       </Card>
 
-      {/* Transfer dialog */}
-      <Dialog open={transferDialogOpen} onOpenChange={setTransferDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>{transferType === 'out' ? 'Chuyển ra khỏi ngành' : 'Điều chuyển đoàn viên'}</DialogTitle>
-            <DialogDescription>
-              {transferTarget && (
-                <span>Đoàn viên: <strong>{transferTarget.fullName}</strong> — Tổ hiện tại: <strong>{transferTarget.department}</strong></span>
-              )}
-            </DialogDescription>
-          </DialogHeader>
-          {transferType === 'move' ? (
-            <div className="space-y-3 py-2">
-              <Label className="text-xs text-muted-foreground">Chuyển đến tổ công đoàn</Label>
-              <Select value={transferDept} onValueChange={setTransferDept}>
-                <SelectTrigger><SelectValue placeholder="Chọn tổ công đoàn đích..." /></SelectTrigger>
-                <SelectContent>
-                  {unionGroupNames.filter(n => n !== transferTarget?.department).map(name => (
-                    <SelectItem key={name} value={name}>{name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          ) : (
-            <div className="py-2">
-              <p className="text-sm text-muted-foreground">
-                Xác nhận chuyển <strong>{transferTarget?.fullName}</strong> ra khỏi ngành? Đoàn viên sẽ bị xóa khỏi danh sách.
-              </p>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setTransferDialogOpen(false)}>Hủy</Button>
-            <Button onClick={handleTransfer} variant={transferType === 'out' ? 'destructive' : 'default'}>
-              {transferType === 'out' ? 'Xác nhận chuyển' : 'Điều chuyển'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Transfer history dialog */}
-      <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
-        <DialogContent className="max-w-2xl max-h-[80vh]">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <History className="h-5 w-5" /> Lịch sử điều chuyển đoàn viên
-            </DialogTitle>
-            <DialogDescription>Danh sách các lần điều chuyển, luân chuyển đoàn viên</DialogDescription>
-          </DialogHeader>
-          <ScrollArea className="h-[400px]">
-            {transferHistory.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground text-sm">Chưa có lịch sử điều chuyển</div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/50">
-                    <TableHead className="w-10">STT</TableHead>
-                    <TableHead>Ngày</TableHead>
-                    <TableHead>Đoàn viên</TableHead>
-                    <TableHead>Từ tổ</TableHead>
-                    <TableHead>Đến tổ</TableHead>
-                    <TableHead>Loại</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {transferHistory.map((r, i) => (
-                    <TableRow key={r.id}>
-                      <TableCell className="text-muted-foreground">{i + 1}</TableCell>
-                      <TableCell className="text-sm">{new Date(r.date).toLocaleDateString('vi-VN')}</TableCell>
-                      <TableCell className="font-medium">{r.staffName}</TableCell>
-                      <TableCell className="text-sm">{r.fromDepartment}</TableCell>
-                      <TableCell className="text-sm">{r.toDepartment}</TableCell>
-                      <TableCell>
-                        <Badge variant={r.type === 'out' ? 'destructive' : 'default'} className="text-[10px]">
-                          {r.type === 'out' ? 'Ra khỏi ngành' : 'Điều chuyển'}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </ScrollArea>
-        </DialogContent>
-      </Dialog>
-
-      {/* Bulk transfer dialog */}
-      <Dialog open={bulkTransferOpen} onOpenChange={setBulkTransferOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <ArrowRightLeft className="h-5 w-5" /> Điều chuyển đoàn viên
-            </DialogTitle>
-            <DialogDescription>Chọn đoàn viên và tổ công đoàn đích để điều chuyển</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div>
-              <Label className="text-xs text-muted-foreground">Chọn đoàn viên</Label>
-              <Select value={bulkTransferStaff} onValueChange={setBulkTransferStaff}>
-                <SelectTrigger><SelectValue placeholder="Chọn đoàn viên..." /></SelectTrigger>
-                <SelectContent>
-                  {list.map(s => (
-                    <SelectItem key={s.id} value={s.id}>{s.fullName} — {s.department}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label className="text-xs text-muted-foreground">Hình thức</Label>
-              <Select value={bulkTransferType} onValueChange={v => setBulkTransferType(v as 'move' | 'out')}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="move">Điều chuyển sang tổ khác</SelectItem>
-                  <SelectItem value="out">Chuyển ra khỏi ngành</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            {bulkTransferType === 'move' && (
-              <div>
-                <Label className="text-xs text-muted-foreground">Chuyển đến tổ công đoàn</Label>
-                <Select value={bulkTransferDept} onValueChange={setBulkTransferDept}>
-                  <SelectTrigger><SelectValue placeholder="Chọn tổ đích..." /></SelectTrigger>
-                  <SelectContent>
-                    {unionGroupNames.filter(n => {
-                      const staff = list.find(s => s.id === bulkTransferStaff);
-                      return n !== staff?.department;
-                    }).map(name => (
-                      <SelectItem key={name} value={name}>{name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setBulkTransferOpen(false)}>Hủy</Button>
-            <Button onClick={handleBulkTransfer} variant={bulkTransferType === 'out' ? 'destructive' : 'default'}>
-              {bulkTransferType === 'out' ? 'Xác nhận chuyển' : 'Điều chuyển'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       <Card className="bg-muted/30 no-print">
         <CardContent className="p-4 text-xs text-muted-foreground space-y-1">
-          <p><strong>Công thức tính:</strong></p>
-          <p>• Lương BH = (Hệ số lương × Lương vùng) + (Hệ số chức vụ × Lương cơ sở)</p>
-          <p>• Đoàn phí CĐ = Lương BH × 0,5% (nhưng không quá 10% × Lương cơ sở)</p>
-          <p>• Trần đoàn phí hiện tại: {fmt(Math.round(settings.baseSalary * 0.1))} ₫/tháng</p>
+          <p><strong>Công thức tính đảng phí:</strong></p>
+          <p>• Lương tính đảng phí = (Lương khu vực × Hệ số lương) + (Hệ số chức vụ × Lương cơ sở)</p>
+          <p>• Đảng phí = Lương tính đảng phí × 1%</p>
         </CardContent>
       </Card>
 
