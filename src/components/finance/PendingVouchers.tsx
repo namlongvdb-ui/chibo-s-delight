@@ -101,7 +101,7 @@ export function PendingVouchers() {
 
       const profileMap = new Map(profiles?.map(p => [p.user_id, p.full_name]) || []);
       filteredVouchers.forEach(v => {
-        v.creator_name = profileMap.get(v.created_by) || 'N/A';
+        (v as any).creator_name = profileMap.get(v.created_by) || 'N/A';
       });
     }
 
