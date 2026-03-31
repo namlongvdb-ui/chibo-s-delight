@@ -68,9 +68,9 @@ export function PrintStaffList() {
       </div>
       <div style={{ textAlign: 'center', marginBottom: '16px' }}>
         <p style={{ fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase' }}>
-          DANH SÁCH ĐOÀN VIÊN CÔNG ĐOÀN
+          DANH SÁCH ĐẢNG VIÊN CHI BỘ
         </p>
-        <p style={{ fontSize: '11px', fontStyle: 'italic', marginTop: '2px' }}>(Sắp xếp theo Tổ Công đoàn)</p>
+        <p style={{ fontSize: '11px', fontStyle: 'italic', marginTop: '2px' }}>(Sắp xếp theo Tổ Đảng)</p>
       </div>
 
       <div style={{ marginBottom: '8px', fontSize: '11px' }}>
