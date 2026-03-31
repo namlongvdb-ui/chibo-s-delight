@@ -16,8 +16,8 @@ interface SettingsFormProps {
 }
 
 const fields: { key: keyof OrgSettings; label: string; placeholder: string; type?: string }[] = [
-  { key: 'orgName', label: 'Tên tổ chức (dòng 1)', placeholder: 'Công đoàn NHPT Việt Nam' },
-  { key: 'orgSubName', label: 'Tên đơn vị (dòng 2)', placeholder: 'Công đoàn NHPT Chi nhánh KV Bắc Đông Bắc' },
+  { key: 'orgName', label: 'Tên tổ chức (dòng 1)', placeholder: 'Đảng bộ UBND Phường Thực Phán' },
+  { key: 'orgSubName', label: 'Tên đơn vị (dòng 2)', placeholder: 'Chi bộ Phòng Giao Dịch Cao Bằng - NHPT' },
   { key: 'leaderName', label: 'Lãnh đạo đơn vị', placeholder: 'Họ tên lãnh đạo' },
   { key: 'accountantName', label: 'Kế toán', placeholder: 'Họ tên kế toán' },
   { key: 'treasurerName', label: 'Thủ quỹ', placeholder: 'Họ tên thủ quỹ' },
