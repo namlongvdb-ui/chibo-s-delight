@@ -268,11 +268,11 @@ export function SettingsForm({ onSaved }: SettingsFormProps) {
                     />
                   </div>
                   <div className="flex-1">
-                    <Label className="text-muted-foreground text-xs">Bí thư chi bộ cơ sở</Label>
+                    <Label className="text-muted-foreground text-xs">Bí thư chi bộ</Label>
                     <Input
                       value={group.leaderName}
                       onChange={e => updateUnionGroup(index, 'leaderName', e.target.value)}
-                      placeholder="Họ tên bí thư chi bộ cơ sở"
+                      placeholder="Họ tên bí thư chi bộ"
                     />
                   </div>
                   <Button
