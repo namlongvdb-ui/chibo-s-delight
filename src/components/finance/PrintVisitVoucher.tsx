@@ -24,14 +24,14 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
   const selectedGroup = settings.unionGroups.find(g => g.name === data.unionGroupName);
   const groupLeaderName = selectedGroup?.leaderName || settings.unionGroups[0]?.leaderName || '';
 
-  // 2. Kiểm tra tổ công đoàn có thuộc địa bàn nào không
+  // 2. Kiểm tra tổ đảng có thuộc địa bàn nào không
   const currentGroupName = data.unionGroupName || "";
   const matchedArea = (settings.areaRepresentatives || []).find(area => 
     area.areaName && currentGroupName.includes(area.areaName)
   );
   
-  // Nếu thuộc địa bàn → "UV BCH Công đoàn", ngược lại → "Chủ tịch"
-  const leftSignatureTitle = matchedArea ? "UV BCH Công đoàn" : "Chủ Tịch";
+  // Nếu thuộc địa bàn → "UV BCH Chi bộ", ngược lại → "Bí thư"
+  const leftSignatureTitle = matchedArea ? "UV BCH Chi bộ" : "Bí thư";
   const leftSignatureName = matchedArea ? matchedArea.officerName : (settings.leaderName || '');
 
   const labelStyle: React.CSSProperties = { margin: '8px 0', lineHeight: '1.7' };
