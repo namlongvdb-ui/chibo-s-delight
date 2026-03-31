@@ -24,7 +24,7 @@ export function PrintVisitVoucher({ data }: PrintVisitVoucherProps) {
   const selectedGroup = settings.unionGroups.find(g => g.name === data.unionGroupName);
   const groupLeaderName = selectedGroup?.leaderName || settings.unionGroups[0]?.leaderName || '';
 
-  // 2. Kiểm tra tổ đảng có thuộc địa bàn nào không
+  // 2. Kiểm tra chi bộ cơ sở có thuộc địa bàn nào không
   const currentGroupName = data.unionGroupName || "";
   const matchedArea = (settings.areaRepresentatives || []).find(area => 
     area.areaName && currentGroupName.includes(area.areaName)
