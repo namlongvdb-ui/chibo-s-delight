@@ -206,7 +206,7 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
       <div style={{ marginBottom: '8px', fontSize: '11px' }}>
         <span>Lương cơ sở: <strong>{fmt(settings.baseSalary)} đ</strong></span>
         <span style={{ margin: '0 10px' }}>|</span>
-        <span>Trần đoàn phí: <strong>{fmt(Math.round(settings.baseSalary * 0.1))} đ</strong></span>
+        <span>Trần đảng phí: <strong>{fmt(Math.round(settings.baseSalary * 0.1))} đ</strong></span>
       </div>
 
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
