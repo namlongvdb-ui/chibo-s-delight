@@ -7,8 +7,8 @@ const ACTIVE_YEAR_KEY = 'union-finance-active-year';
 const YEAR_DATA_KEY = 'union-finance-year-data';
 
 const defaultSettings: OrgSettings = {
-  orgName: 'CÔNG ĐOÀN NHPT VIỆT NAM',
-  orgSubName: 'CÔNG ĐOÀN NHPT CHI NHÁNH KV BẮC ĐÔNG BẮC',
+  orgName: 'ĐẢNG BỘ UBND PHƯỜNG THỰC PHÁN',
+  orgSubName: 'CHI BỘ PHÒNG GIAO DỊCH CAO BẰNG - NHPT',
   leaderName: 'Phí Quang Chiến',
   accountantName: 'Lê Thị Thu Hương',
   creatorName: 'Lê Thị Thu Hương',

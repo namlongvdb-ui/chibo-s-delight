@@ -18,7 +18,7 @@ const menuItems: { view: ViewType; label: string; icon: React.ElementType; admin
   { view: 'phieu-chi', label: 'Phiếu Chi', icon: FileOutput },
   { view: 'so-quy', label: 'Sổ Quỹ', icon: BookOpen },
   { view: 'so-chi-tiet', label: 'Sổ Chi Tiết', icon: ClipboardList },
-  { view: 'danh-sach-can-bo', label: 'Danh Sách Đoàn Viên', icon: Users },
+  { view: 'danh-sach-can-bo', label: 'Danh Sách Đảng Viên', icon: Users },
   { view: 'khoa-so', label: 'Khóa Sổ & Kết Chuyển', icon: BookOpenCheck },
   { view: 'cai-dat', label: 'Cài đặt', icon: Settings },
   { view: 'doi-mat-khau', label: 'Đổi mật khẩu', icon: KeyRound },
@@ -44,10 +44,10 @@ export function AppSidebar({ currentView, onViewChange, refreshKey, notification
       {/* Header */}
       <div className="p-5 border-b border-white/10" style={{ backgroundColor: 'rgba(0,0,0,0.1)' }}>
         <h1 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-          Quản Lý Tài Chính
+          Quản Lý Tài Chính Chi Bộ
         </h1>
         <p className="text-[10px] uppercase tracking-widest text-blue-200 mt-1 font-semibold opacity-80">
-          Công đoàn Chi nhánh NHPT
+          Chi Bộ PGD Cao Bằng - NHPT
         </p>
         <div className="mt-2 flex items-center gap-1.5 text-xs">
           <span className={`inline-block w-2 h-2 rounded-full ${closed ? 'bg-red-400' : 'bg-green-400'}`}></span>

@@ -63,16 +63,14 @@ export function PrintStaffList() {
           <div style={{ width: '60px', borderBottom: '2px solid #000', margin: '6px auto' }}></div>
         </div>
         <div style={{ textAlign: 'center', width: '45%' }}>
-          <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
-          <p style={{ fontSize: '12px', fontWeight: 'bold' }}>Độc lập - Tự do - Hạnh phúc</p>
-          <div style={{ width: '120px', borderBottom: '2px solid #000', margin: '6px auto' }}></div>
+          <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', textDecoration: 'underline' }}>ĐẢNG CỘNG SẢN VIỆT NAM</p>
         </div>
       </div>
       <div style={{ textAlign: 'center', marginBottom: '16px' }}>
         <p style={{ fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase' }}>
-          DANH SÁCH ĐOÀN VIÊN CÔNG ĐOÀN
+          DANH SÁCH ĐẢNG VIÊN CHI BỘ
         </p>
-        <p style={{ fontSize: '11px', fontStyle: 'italic', marginTop: '2px' }}>(Sắp xếp theo Tổ Công đoàn)</p>
+        <p style={{ fontSize: '11px', fontStyle: 'italic', marginTop: '2px' }}>(Sắp xếp theo Tổ Đảng)</p>
       </div>
 
       <div style={{ marginBottom: '8px', fontSize: '11px' }}>
@@ -82,7 +80,7 @@ export function PrintStaffList() {
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
         <thead>
           <tr>
-            {['STT', 'Họ và tên', 'Chức vụ', 'Ngày sinh', 'GT', 'HS lương', 'HS CV', 'Lương vùng', 'Lương BH', 'Đoàn phí CĐ'].map((h, i) => (
+            {['STT', 'Họ và tên', 'Chức vụ', 'Ngày sinh', 'GT', 'HS lương', 'HS CV', 'Lương vùng', 'Lương BH', 'Đảng phí'].map((h, i) => (
               <th key={i} style={{ ...centerCell, fontWeight: 'bold', backgroundColor: '#f0f0f0', fontSize: '11px' }}>{h}</th>
             ))}
           </tr>
@@ -121,8 +119,8 @@ export function PrintStaffList() {
                   );
                 })}
                 <tr>
-                  <td colSpan={8} style={{ ...rightCell, fontWeight: 'bold', fontStyle: 'italic', fontSize: '10px' }}>
-                    Cộng {dept}: {members.length} đoàn viên
+                   <td colSpan={8} style={{ ...rightCell, fontWeight: 'bold', fontStyle: 'italic', fontSize: '10px' }}>
+                     Cộng {dept}: {members.length} đảng viên
                   </td>
                   <td style={{ ...rightCell, fontWeight: 'bold' }}>
                     {fmt(Math.round(members.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}
@@ -133,8 +131,8 @@ export function PrintStaffList() {
             );
           })}
           <tr>
-            <td colSpan={8} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
-              TỔNG CỘNG: {list.length} đoàn viên
+             <td colSpan={8} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
+               TỔNG CỘNG: {list.length} đảng viên
             </td>
             <td style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
               {fmt(Math.round(list.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}
@@ -193,14 +191,12 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
           <div style={{ width: '60px', borderBottom: '2px solid #000', margin: '6px auto' }}></div>
         </div>
         <div style={{ textAlign: 'center', width: '45%' }}>
-          <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
-          <p style={{ fontSize: '12px', fontWeight: 'bold' }}>Độc lập - Tự do - Hạnh phúc</p>
-          <div style={{ width: '120px', borderBottom: '2px solid #000', margin: '6px auto' }}></div>
+          <p style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', textDecoration: 'underline' }}>ĐẢNG CỘNG SẢN VIỆT NAM</p>
         </div>
       </div>
       <div style={{ textAlign: 'center', marginBottom: '16px' }}>
         <p style={{ fontSize: '14px', fontWeight: 'bold', textTransform: 'uppercase' }}>
-          DANH SÁCH THU ĐOÀN PHÍ CÔNG ĐOÀN
+          DANH SÁCH THU ĐẢNG PHÍ CHI BỘ
         </p>
         <p style={{ fontSize: '12px', fontWeight: 'bold', marginTop: '4px' }}>
           Tháng {String(month).padStart(2, '0')} năm {year}
@@ -210,13 +206,13 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
       <div style={{ marginBottom: '8px', fontSize: '11px' }}>
         <span>Lương cơ sở: <strong>{fmt(settings.baseSalary)} đ</strong></span>
         <span style={{ margin: '0 10px' }}>|</span>
-        <span>Trần đoàn phí: <strong>{fmt(Math.round(settings.baseSalary * 0.1))} đ</strong></span>
+        <span>Trần đảng phí: <strong>{fmt(Math.round(settings.baseSalary * 0.1))} đ</strong></span>
       </div>
 
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
         <thead>
           <tr>
-            {['STT', 'Họ và tên', 'Chức vụ', 'HS lương', 'HS CV', 'Lương vùng', 'Lương BH', 'Đoàn phí (0,5%)', 'Ký nhận'].map((h, i) => (
+            {['STT', 'Họ và tên', 'Chức vụ', 'HS lương', 'HS CV', 'Lương vùng', 'Lương BH', 'Đảng phí (0,5%)', 'Ký nhận'].map((h, i) => (
               <th key={i} style={{ ...centerCell, fontWeight: 'bold', backgroundColor: '#f0f0f0', fontSize: '11px' }}>{h}</th>
             ))}
           </tr>
@@ -254,8 +250,8 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
                   );
                 })}
                 <tr>
-                  <td colSpan={6} style={{ ...rightCell, fontWeight: 'bold', fontStyle: 'italic', fontSize: '10px' }}>
-                    Cộng {dept}: {members.length} đoàn viên
+                   <td colSpan={6} style={{ ...rightCell, fontWeight: 'bold', fontStyle: 'italic', fontSize: '10px' }}>
+                     Cộng {dept}: {members.length} đảng viên
                   </td>
                   <td style={{ ...rightCell, fontWeight: 'bold' }}>
                     {fmt(Math.round(members.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}
@@ -267,8 +263,8 @@ export function PrintMonthlyFee({ month, year }: PrintMonthlyFeeProps) {
             );
           })}
           <tr>
-            <td colSpan={6} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
-              TỔNG CỘNG: {list.length} đoàn viên
+             <td colSpan={6} style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
+               TỔNG CỘNG: {list.length} đảng viên
             </td>
             <td style={{ ...rightCell, fontWeight: 'bold', fontSize: '12px' }}>
               {fmt(Math.round(list.reduce((s, m) => s + calculateInsuranceSalary(m.salaryCoefficient, m.positionCoefficient, m.regionalSalary, settings.baseSalary), 0)))}

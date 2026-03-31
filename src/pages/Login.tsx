@@ -42,7 +42,7 @@ const Login = () => {
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
             <Shield className="w-8 h-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl font-bold">Quản lý Tài chính</CardTitle>
+          <CardTitle className="text-2xl font-bold">Quản lý Tài chính Chi bộ</CardTitle>
           <CardDescription>Đăng nhập để truy cập hệ thống</CardDescription>
         </CardHeader>
         <CardContent>

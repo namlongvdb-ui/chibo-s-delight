@@ -48,9 +48,10 @@ export function PrintVoucher({ type, data, signatures = [] }: PrintVoucherProps)
         <div style={{ textAlign: 'center', width: '60%' }}>
           <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{settings.orgName.toUpperCase()}</p>
           <p style={{ fontWeight: 'bold', fontSize: '13px', margin: '2px 0 0', textDecoration: 'underline' }}>{settings.orgSubName.toUpperCase()}</p>
+          <p style={{ fontSize: '13px', margin: '2px 0 0' }}>*</p>
         </div>
-        <div style={{ textAlign: 'right', width: '40%', fontSize: '12px' }}>
-          <p style={{ margin: 0 }}>Mẫu số: C41-BB</p>
+        <div style={{ textAlign: 'center', width: '40%', fontSize: '13px' }}>
+          <p style={{ fontWeight: 'bold', margin: 0, textDecoration: 'underline' }}>ĐẢNG CỘNG SẢN VIỆT NAM</p>
         </div>
       </div>
 

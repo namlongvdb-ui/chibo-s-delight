@@ -43,9 +43,10 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
         <div style={{ textAlign: 'center', width: '60%' }}>
           <p style={{ fontWeight: 'bold', fontSize: '13px', margin: 0 }}>{settings.orgName.toUpperCase()}</p>
           <p style={{ fontWeight: 'bold', fontSize: '13px', margin: '2px 0 0', textDecoration: 'underline' }}>{settings.orgSubName.toUpperCase()}</p>
+          <p style={{ fontSize: '13px', margin: '2px 0 0' }}>*</p>
         </div>
-        <div style={{ textAlign: 'center', width: '40%', fontSize: '12px' }}>
-          <p style={{ margin: 0 }}>Mẫu: C37-HĐ</p>
+        <div style={{ textAlign: 'center', width: '40%', fontSize: '13px' }}>
+          <p style={{ fontWeight: 'bold', margin: 0, textDecoration: 'underline' }}>ĐẢNG CỘNG SẢN VIỆT NAM</p>
         </div>
       </div>
 
@@ -65,7 +66,7 @@ export function PrintPaymentRequest({ data }: PrintPaymentRequestProps) {
 
       {/* 3. Kính gửi */}
       <div style={{ textAlign: 'center', margin: '15px 0', fontWeight: 'bold', fontSize: '14px' }}>
-        <p style={{ margin: 0 }}>Kính gửi: BCH Công đoàn NHPT Chi nhánh KV Bắc Đông Bắc</p>
+        <p style={{ margin: 0 }}>Kính gửi: BCH Chi bộ PGD Cao Bằng - NHPT</p>
       </div>
 
       {/* 4. Nội dung chính */}
