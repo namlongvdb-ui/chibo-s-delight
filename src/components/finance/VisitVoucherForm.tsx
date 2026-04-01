@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { addTransaction, updateTransaction, getNextVoucherNo, numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
 import { Transaction } from '@/types/finance';
-import { Heart, Printer, Save, X, DollarSign, User, Users } from 'lucide-react';
+import { Heart, Printer, Save, X, DollarSign, User, Users, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintVisitVoucher } from './PrintVisitVoucher';
 import { TransactionList } from './TransactionList';
