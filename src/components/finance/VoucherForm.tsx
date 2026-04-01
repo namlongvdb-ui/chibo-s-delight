@@ -184,6 +184,36 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
 
   const isThu = type === 'thu';
 
+  if (showPrintView) {
+    return (
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center gap-2 mb-4 no-print">
+          <Button variant="outline" size="sm" onClick={() => setShowPrintView(false)}>
+            <ArrowLeft className="h-4 w-4 mr-1" /> Quay lại
+          </Button>
+          <Button variant="default" size="sm" onClick={() => window.print()}>
+            <Printer className="h-4 w-4 mr-1" /> In
+          </Button>
+        </div>
+        <PrintVoucher
+          type={type}
+          data={{
+            date: form.date,
+            voucherNo: form.voucherNo,
+            amount,
+            description: form.description,
+            personName: form.personName,
+            department: form.department,
+            accountCode: form.accountCode,
+            approver: form.approver,
+            attachments: form.attachments,
+          }}
+          signatures={printSignatures}
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       <Card className="max-w-3xl mx-auto shadow-lg no-print overflow-hidden border-0 ring-1 ring-border">
@@ -200,7 +230,6 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
               setShowPrintView(true);
             }} className="bg-background/80 backdrop-blur-sm">
               <Printer className="h-4 w-4 mr-1" /> In phiếu
-            </Button>
             </Button>
           </div>
           <div className="text-center">
@@ -294,24 +323,6 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
           </form>
         </CardContent>
       </Card>
-
-      <div className="print-only hidden">
-        <PrintVoucher
-          type={type}
-          data={{
-            date: form.date,
-            voucherNo: form.voucherNo,
-            amount,
-            description: form.description,
-            personName: form.personName,
-            department: form.department,
-            accountCode: form.accountCode,
-            approver: form.approver,
-            attachments: form.attachments,
-          }}
-          signatures={printSignatures}
-        />
-      </div>
 
       <VoucherList type={type} onChanged={onSaved} refreshKey={refreshKey} onSelectForEdit={handleSelectForEdit} />
     </>
