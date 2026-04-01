@@ -123,10 +123,37 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
     onSaved?.();
   };
 
+  if (showPrintView) {
+    return (
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center gap-2 mb-4 no-print">
+          <Button variant="outline" size="sm" onClick={() => setShowPrintView(false)}>
+            <ArrowLeft className="h-4 w-4 mr-1" /> Quay lại
+          </Button>
+          <Button variant="default" size="sm" onClick={() => window.print()}>
+            <Printer className="h-4 w-4 mr-1" /> In
+          </Button>
+        </div>
+        <PrintPaymentRequest data={{
+          date: form.date,
+          requestNo: form.requestNo,
+          requesterName: form.requesterName,
+          department: form.department,
+          content: form.content,
+          amount,
+          times: form.times,
+          bankAccount: form.bankAccount,
+          bankAccountName: form.bankAccountName,
+          bankName: form.bankName,
+          attachments: form.attachments,
+        }} />
+      </div>
+    );
+  }
+
   return (
     <>
       <Card className="max-w-3xl mx-auto shadow-lg no-print overflow-hidden border-0 ring-1 ring-border">
-        {/* Header */}
         <CardHeader className={`relative py-5 ${editingTx ? 'bg-amber-50 dark:bg-amber-950/30 border-b-2 border-amber-300 dark:border-amber-700' : 'bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-950/30 dark:to-purple-950/30 border-b-2 border-violet-200 dark:border-violet-800'}`}>
           <div className="flex items-center gap-2 absolute right-4 top-4">
             {editingTx && (
@@ -134,7 +161,7 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
                 <X className="h-4 w-4 mr-1" /> Hủy sửa
               </Button>
             )}
-            <Button type="button" variant="outline" size="sm" onClick={() => window.print()} className="bg-background/80 backdrop-blur-sm">
+            <Button type="button" variant="outline" size="sm" onClick={() => setShowPrintView(true)} className="bg-background/80 backdrop-blur-sm">
               <Printer className="h-4 w-4 mr-1" /> In giấy
             </Button>
           </div>
@@ -155,7 +182,6 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
 
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Row 1: Date & Voucher No */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label className="text-muted-foreground text-xs font-medium">Ngày</Label>
@@ -167,7 +193,6 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
               </div>
             </div>
 
-            {/* Requester name */}
             <div className="space-y-1.5">
               <Label className="text-muted-foreground text-xs font-medium flex items-center gap-1.5">
                 <User className="h-3.5 w-3.5" />
@@ -176,7 +201,6 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
               <Input value={form.requesterName} onChange={e => setForm({ ...form, requesterName: e.target.value })} placeholder="Nhập họ tên..." className="h-10" />
             </div>
 
-            {/* Department */}
             <div className="space-y-1.5">
               <Label className="text-muted-foreground text-xs font-medium flex items-center gap-1.5">
                 <Building2 className="h-3.5 w-3.5" />
@@ -194,41 +218,24 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
               </Select>
             </div>
 
-            {/* Content */}
             <div className="space-y-1.5">
               <Label className="text-muted-foreground text-xs font-medium">Nội dung thanh toán</Label>
               <Textarea value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} placeholder="Nội dung chi tiết..." rows={2} className="resize-none" />
             </div>
 
-            <div className="grid grid-cols-2 gap-3 items-end"> {/* items-end giúp chân 2 ô nhập luôn thẳng hàng */}
-  {/* Cột 1: Số tiền */}
-  <div className="flex flex-col space-y-1.5"> 
-    <Label className="text-muted-foreground text-xs font-medium flex items-center gap-1.5 h-4">
-      <DollarSign className="h-3.5 w-3.5" />
-      Số tiền (VNĐ)
-    </Label>
-    <Input 
-      type="number" 
-      value={form.amount} 
-      onChange={e => setForm({ ...form, amount: e.target.value })} 
-      placeholder="0" 
-      className="h-12 text-lg font-bold tracking-wide" // Hạ text-xl xuống text-lg để bớt "phồng" ô
-    />
-  </div>
-
-  {/* Cột 2: Lần thứ */}
-  <div className="flex flex-col space-y-1.5">
-    <Label className="text-muted-foreground text-xs font-medium h-4 flex items-center">
-      Lần thứ
-    </Label>
-    <Input 
-      value={form.times} 
-      onChange={e => setForm({ ...form, times: e.target.value })} 
-      placeholder="" 
-      className="h-12 text-center font-mono" 
-    />
-  </div>
-</div>
+            <div className="grid grid-cols-2 gap-3 items-end">
+              <div className="flex flex-col space-y-1.5">
+                <Label className="text-muted-foreground text-xs font-medium flex items-center gap-1.5 h-4">
+                  <DollarSign className="h-3.5 w-3.5" />
+                  Số tiền (VNĐ)
+                </Label>
+                <Input type="number" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} placeholder="0" className="h-12 text-lg font-bold tracking-wide" />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label className="text-muted-foreground text-xs font-medium h-4 flex items-center">Lần thứ</Label>
+                <Input value={form.times} onChange={e => setForm({ ...form, times: e.target.value })} placeholder="" className="h-12 text-center font-mono" />
+              </div>
+            </div>
 
             {amount > 0 && (
               <div className="rounded-lg p-3.5 bg-violet-50 dark:bg-violet-950/20 border border-violet-200 dark:border-violet-800">
@@ -237,7 +244,6 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
               </div>
             )}
 
-            {/* Bank info section */}
             <div className="rounded-lg border border-border bg-muted/20 p-4 space-y-3">
               <div className="flex items-center gap-2 mb-1">
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
@@ -259,7 +265,6 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
               </div>
             </div>
 
-            {/* Attachments */}
             <div className="space-y-1.5">
               <Label className="text-muted-foreground text-xs font-medium">Kèm theo chứng từ gốc</Label>
               <Input value={form.attachments} onChange={e => setForm({ ...form, attachments: e.target.value })} placeholder="Số chứng từ gốc..." className="h-10" />
@@ -271,22 +276,6 @@ export function PaymentRequestForm({ onSaved, refreshKey }: PaymentRequestFormPr
           </form>
         </CardContent>
       </Card>
-
-      <div className="print-only hidden">
-        <PrintPaymentRequest data={{
-          date: form.date,
-          requestNo: form.requestNo,
-          requesterName: form.requesterName,
-          department: form.department,
-          content: form.content,
-          amount,
-          times: form.times,
-          bankAccount: form.bankAccount,
-          bankAccountName: form.bankAccountName,
-          bankName: form.bankName,
-          attachments: form.attachments,
-        }} />
-      </div>
 
       <TransactionList
         type="de-nghi"
