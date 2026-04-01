@@ -106,13 +106,20 @@ All colors MUST be HSL.
 
 /* Print styles - only show print-voucher content when printing */
 @media print {
-  body * {
-    visibility: hidden;
+  /* Hide everything except print content */
+  .no-print,
+  nav,
+  aside,
+  header,
+  footer,
+  button,
+  .sidebar {
+    display: none !important;
   }
 
-  .print-voucher,
-  .print-voucher * {
-    visibility: visible !important;
+  /* Show print-only sections */
+  .print-only {
+    display: block !important;
   }
 
   .print-voucher {
@@ -123,6 +130,7 @@ All colors MUST be HSL.
     padding: 20px 40px !important;
     margin: 0 !important;
     max-width: 100% !important;
+    background: #fff !important;
   }
 
   @page {
