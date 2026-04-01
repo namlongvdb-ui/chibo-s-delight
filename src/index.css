@@ -103,3 +103,30 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Print styles - only show print-voucher content when printing */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-voucher,
+  .print-voucher * {
+    visibility: visible !important;
+  }
+
+  .print-voucher {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px 40px !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+}
