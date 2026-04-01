@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { addTransaction, updateTransaction, getNextVoucherNo, numberToVietnameseWords, getOrgSettings } from '@/lib/finance-store';
 import { Transaction } from '@/types/finance';
-import { Heart, Printer, Save, X, DollarSign, User, Users } from 'lucide-react';
+import { Heart, Printer, Save, X, DollarSign, User, Users, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { PrintVisitVoucher } from './PrintVisitVoucher';
 import { TransactionList } from './TransactionList';
@@ -34,6 +34,7 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
   const settings = getOrgSettings();
   const [form, setForm] = useState(() => emptyForm(settings));
   const [editingTx, setEditingTx] = useState<Transaction | null>(null);
+  const [showPrintView, setShowPrintView] = useState(false);
 
   const amount = parseInt(form.amount) || 0;
 
@@ -107,10 +108,32 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
     onSaved?.();
   };
 
+  if (showPrintView) {
+    return (
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center gap-2 mb-4 no-print">
+          <Button variant="outline" size="sm" onClick={() => setShowPrintView(false)}>
+            <ArrowLeft className="h-4 w-4 mr-1" /> Quay lại
+          </Button>
+          <Button variant="default" size="sm" onClick={() => window.print()}>
+            <Printer className="h-4 w-4 mr-1" /> In
+          </Button>
+        </div>
+        <PrintVisitVoucher data={{
+          date: form.date,
+          visitorDepartment: form.visitorDepartment,
+          recipientName: form.recipientName,
+          reason: form.reason,
+          amount,
+          unionGroupName: form.unionGroupName,
+        }} />
+      </div>
+    );
+  }
+
   return (
     <>
       <Card className="max-w-3xl mx-auto shadow-lg no-print overflow-hidden border-0 ring-1 ring-border">
-        {/* Header */}
         <CardHeader className={`relative py-5 ${editingTx ? 'bg-amber-50 dark:bg-amber-950/30 border-b-2 border-amber-300 dark:border-amber-700' : 'bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-950/30 dark:to-pink-950/30 border-b-2 border-rose-200 dark:border-rose-800'}`}>
           <div className="flex items-center gap-2 absolute right-4 top-4">
             {editingTx && (
@@ -118,7 +141,7 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
                 <X className="h-4 w-4 mr-1" /> Hủy sửa
               </Button>
             )}
-            <Button type="button" variant="outline" size="sm" onClick={() => window.print()} className="bg-background/80 backdrop-blur-sm">
+            <Button type="button" variant="outline" size="sm" onClick={() => setShowPrintView(true)} className="bg-background/80 backdrop-blur-sm">
               <Printer className="h-4 w-4 mr-1" /> In phiếu
             </Button>
           </div>
@@ -139,7 +162,6 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
 
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Row 1: Date & Voucher No */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label className="text-muted-foreground text-xs font-medium">Ngày</Label>
@@ -151,7 +173,6 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
               </div>
             </div>
 
-            {/* Union group */}
             <div className="space-y-1.5">
               <Label className="text-muted-foreground text-xs font-medium flex items-center gap-1.5">
                 <Users className="h-3.5 w-3.5" />
@@ -169,7 +190,6 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
               </Select>
             </div>
 
-            {/* Recipient name */}
             <div className="space-y-1.5">
               <Label className="text-muted-foreground text-xs font-medium flex items-center gap-1.5">
                 <User className="h-3.5 w-3.5" />
@@ -178,13 +198,11 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
               <Input value={form.recipientName} onChange={e => setForm({ ...form, recipientName: e.target.value })} placeholder="Nhập họ tên..." className="h-10" />
             </div>
 
-            {/* Reason */}
             <div className="space-y-1.5">
               <Label className="text-muted-foreground text-xs font-medium">Lý do thăm hỏi</Label>
               <Textarea value={form.reason} onChange={e => setForm({ ...form, reason: e.target.value })} placeholder="Lý do thăm hỏi..." rows={2} className="resize-none" />
             </div>
 
-            {/* Amount */}
             <div className="space-y-1.5">
               <Label className="text-muted-foreground text-xs font-medium flex items-center gap-1.5">
                 <DollarSign className="h-3.5 w-3.5" />
@@ -206,17 +224,6 @@ export function VisitVoucherForm({ onSaved, refreshKey }: VisitVoucherFormProps)
           </form>
         </CardContent>
       </Card>
-
-      <div className="print-only hidden">
-        <PrintVisitVoucher data={{
-          date: form.date,
-          visitorDepartment: form.visitorDepartment,
-          recipientName: form.recipientName,
-          reason: form.reason,
-          amount,
-          unionGroupName: form.unionGroupName,
-        }} />
-      </div>
 
       <TransactionList
         type="tham-hoi"
