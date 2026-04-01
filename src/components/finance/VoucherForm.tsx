@@ -72,6 +72,7 @@ export function VoucherForm({ type, onSaved, refreshKey }: VoucherFormProps) {
   const [form, setForm] = useState(() => emptyForm(type, settings));
   const [editingTx, setEditingTx] = useState<Transaction | null>(null);
   const [printSignatures, setPrintSignatures] = useState<{ signer_name: string; role: string; signed_at: string }[]>([]);
+  const [showPrintView, setShowPrintView] = useState(false);
 
   const amount = parseInt(form.amount) || 0;
 
